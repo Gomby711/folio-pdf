@@ -540,7 +540,7 @@ export default function App() {
     updateFile(file.id, { status: 'processing', progress: 20 });
     try {
       const data = await loadFileData(file);
-      updateFile(file.id, { status: 'done', progress: 100 });
+      updateFile(file.id, { status: 'done', progress: 100, outputPath: file.path });
       setViewerFile({ data, name: file.name, path: file.path });
       historyAddAndRefresh({ name: file.name, tool: 'read', from: 'pdf', to: 'pdf', bytes: data.byteLength, outputPath: file.path }).catch(() => {});
     } catch (err) { updateFile(file.id, { status: 'error', error: String(err) }); }
