@@ -36,20 +36,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Generate icon.ico for Windows installer
-        if: runner.os == 'Windows'
-        shell: pwsh
-        run: |
-          npm install -g png2icons 2>$null
-          node -e "
-            const fs = require('fs');
-            const png2icons = require('png2icons');
-            const input = fs.readFileSync('build/icon.png');
-            const ico = png2icons.createICO(input, png2icons.BILINEAR, 0, true, true);
-            fs.writeFileSync('build/icon.ico', ico);
-            console.log('icon.ico written');
-          "
-
       - name: Build & publish to GitHub Releases
         run: npm run release
         env:
