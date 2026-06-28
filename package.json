@@ -1,6 +1,6 @@
 {
   "name": "folio-pdf",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Folio — Professional PDF Suite (Read, Convert, Compress, Scan)",
   "author": {
     "name": "Evan Lee",
@@ -69,7 +69,7 @@
     ],
     "win": {
       "target": "nsis",
-      "icon": "build/icon.ico"
+      "icon": "build/icon.png"
     },
     "nsis": {
       "shortcutName": "Folio PDF"
