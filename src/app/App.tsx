@@ -987,7 +987,6 @@ export default function App() {
 
         {/* Logo */}
         <div className="flex items-center gap-3 px-3.5 py-4 border-b" style={{ borderColor: 'rgba(79,110,247,0.12)' }}>
-          <img src="/app-icon.png" alt="Folio PDF" className="w-8 h-8 rounded-xl shrink-0 object-cover" />
           {sidebarOpen && (
             <div>
               <p className="font-semibold leading-tight" style={{ ...outfit, fontSize: 15, color: '#d8daee' }}>Folio</p>
