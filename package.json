@@ -1,0 +1,114 @@
+{
+  "name": "folio-pdf",
+  "version": "0.1.0",
+  "description": "Folio — Professional PDF Suite (Read, Convert, Compress, Scan)",
+  "author": "",
+  "license": "MIT",
+  "main": "dist-electron/main.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build && electron-builder",
+    "build:dir": "tsc --noEmit && vite build && electron-builder --dir",
+    "release": "tsc --noEmit && vite build && electron-builder --publish always",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.12",
+    "@types/node": "^22.10.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "electron": "^33.4.11",
+    "electron-builder": "^25.1.8",
+    "tailwindcss": "^4.1.12",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.3",
+    "vite-plugin-electron": "^0.29.0",
+    "vite-plugin-electron-renderer": "^0.14.6"
+  },
+  "dependencies": {
+    "docx": "^9.7.1",
+    "electron-updater": "^6.8.9",
+    "lucide-react": "^0.487.0",
+    "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^4.10.38",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tesseract.js": "^5.1.1",
+    "xlsx": "^0.18.5"
+  },
+  "build": {
+    "appId": "com.folio.pdf",
+    "productName": "Folio PDF",
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "Gomby711",
+        "repo": "folio-pdf",
+        "releaseType": "release"
+      }
+    ],
+    "files": [
+      "dist",
+      "dist-electron"
+    ],
+    "directories": {
+      "output": "release",
+      "buildResources": "build"
+    },
+    "extraResources": [
+      {
+        "from": "build/icon.png",
+        "to": "icon.png"
+      }
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "build/icon.png"
+    },
+    "nsis": {
+      "installerIcon": "build/icon.png",
+      "uninstallerIcon": "build/icon.png",
+      "shortcutName": "Folio PDF"
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.png",
+      "category": "public.app-category.productivity"
+    },
+    "dmg": {
+      "title": "Folio PDF"
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": ["x64"]
+        },
+        {
+          "target": "deb",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "build/icon.png",
+      "category": "Office"
+    }
+  }
+}

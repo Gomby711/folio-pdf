@@ -1,0 +1,45 @@
+name: Release (Windows / macOS / Linux)
+
+# Builds installers for every desktop OS AND publishes them to a GitHub Release,
+# which is the feed the in-app auto-updater checks. macOS and Linux binaries
+# MUST be built on their own OS, so we fan out across native runners.
+#
+# To ship an update: bump "version" in package.json, commit, then:
+#     git tag v1.0.1 && git push origin v1.0.1
+# Each runner builds its OS and uploads to the GitHub Release for that tag,
+# including the latest*.yml manifests the updater reads. Installed apps then
+# show the "Update available" indicator.
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write   # needed to create/update the GitHub Release
+
+jobs:
+  release:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build & publish to GitHub Releases
+        run: npm run release
+        env:
+          # electron-builder uploads to the GitHub Release using this token.
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Not code-signing in CI; skip cert auto-discovery so the build passes.
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'

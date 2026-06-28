@@ -1,0 +1,203 @@
+@import "tailwindcss";
+@import "./styles/theme.css";
+
+@layer base {
+  * { @apply border-border outline-ring/50; box-sizing: border-box; }
+
+  body {
+    background-color: #080810;
+    color: #d1d1df;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background:
+      radial-gradient(ellipse 80% 50% at 20% 10%, rgba(79,110,247,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 80%, rgba(124,89,245,0.10) 0%, transparent 60%),
+      #080810;
+    pointer-events: none;
+  }
+
+  h1 { font-size: 1.25rem; font-weight: 600; letter-spacing: -0.015em; font-family: 'Outfit', sans-serif; }
+  h2 { font-size: 1rem;    font-weight: 600; letter-spacing: -0.01em;  font-family: 'Outfit', sans-serif; }
+  h3 { font-size: 0.875rem; font-weight: 600; }
+
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: rgba(20,20,32,0.5); }
+  ::-webkit-scrollbar-thumb { background: #2a2a42; border-radius: 2px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+  button { transition: background-color 0.1s, border-color 0.1s, color 0.1s, opacity 0.1s; cursor: pointer; }
+  button:active { opacity: 0.85; }
+}
+
+/* ── Neon glass border — applied to cards, panels, and buttons ── */
+.neon {
+  position: relative;
+  isolation: isolate;
+  box-shadow: 0 0 18px rgba(79,110,247,0.12), inset 0 1px 0 rgba(160,160,255,0.10);
+}
+.neon::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.2px;
+  background: linear-gradient(120deg, #4F6EF7 0%, #6F5CF0 40%, #7C59F5 75%, #4F6EF7 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.75;
+}
+.neon::after {
+  content: "";
+  position: absolute;
+  left: 10%; right: 10%;
+  top: 0; height: 2px;
+  border-radius: 2px;
+  background: radial-gradient(60% 100% at 50% 0%, rgba(180,200,255,0.5), rgba(180,200,255,0) 72%);
+  pointer-events: none;
+}
+
+/* ── Neon button — glass ring + glow on hover ── */
+.neon-btn {
+  position: relative;
+  isolation: isolate;
+  transition: box-shadow 0.16s, filter 0.16s;
+}
+.neon-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.1px;
+  background: linear-gradient(120deg, #4F6EF7 0%, #6F5CF0 45%, #7C59F5 78%, #4F6EF7 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.7;
+  transition: opacity 0.16s;
+}
+.neon-btn:hover { box-shadow: 0 0 8px rgba(79,110,247,0.25); }
+.neon-btn:hover::before { opacity: 1; }
+.neon-btn::after {
+  content: "";
+  position: absolute;
+  left: 16%; right: 16%; top: 0;
+  height: 2px; border-radius: 2px;
+  opacity: 0;
+  background: linear-gradient(90deg, transparent, #4F6EF7, transparent);
+  box-shadow: 0 0 4px #4F6EF7;
+  transition: opacity 0.16s;
+  pointer-events: none;
+}
+.neon-btn:hover::after,
+.neon-btn[data-active="true"]::after { opacity: 1; }
+.neon-btn[data-active="true"]::before { opacity: 1; }
+.neon-btn[data-active="true"] {
+  box-shadow: 0 0 8px rgba(79,110,247,0.22), 0 0 14px rgba(79,110,247,0.12);
+}
+
+/* ── Tab bar ── */
+.tabbar {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  border-radius: 14px;
+  background: rgba(8,8,20,0.6);
+  box-shadow: 0 0 20px rgba(79,110,247,0.20), 0 6px 20px rgba(0,0,0,0.4), inset 0 1px 0 rgba(150,160,255,0.15);
+  overflow: hidden;
+  isolation: isolate;
+}
+.tabbar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  padding: 1.2px;
+  background: linear-gradient(100deg, #4F6EF7 0%, #6F5CF0 42%, #7C59F5 72%, #4F6EF7 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.90;
+}
+.tabbar::after {
+  content: "";
+  position: absolute;
+  left: 8%; right: 8%; top: -1px; height: 3px;
+  background: radial-gradient(60% 100% at 50% 0%, rgba(200,210,255,0.80), rgba(200,210,255,0) 72%);
+  filter: blur(1px);
+  pointer-events: none;
+}
+
+.tabbtn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  color: #888aaa;
+  border-right: 1px solid rgba(255,255,255,0.06);
+  transition: background 0.14s, color 0.14s;
+}
+.tabbtn:last-child { border-right: none; }
+.tabbtn:hover { background: rgba(79,110,247,0.12); color: #d0d5ff; }
+.tabbtn[data-active="true"] { background: rgba(79,110,247,0.18); color: #ffffff; }
+.tabbtn:hover::after,
+.tabbtn[data-active="true"]::after {
+  content: "";
+  position: absolute;
+  left: 14%; right: 14%; top: 0; height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, #4F6EF7, transparent);
+  box-shadow: 0 0 8px #4F6EF7, 0 0 16px #4F6EF7;
+}
+
+/* ── pdfjs text layer (enables text selection in PDFViewer) ── */
+.pdf-text-layer {
+  position: absolute;
+  top: 0; left: 0;
+  overflow: hidden;
+  line-height: 1;
+}
+.pdf-text-layer span,
+.pdf-text-layer br {
+  color: transparent;
+  position: absolute;
+  white-space: pre;
+  cursor: text;
+  transform-origin: 0% 0%;
+}
+.pdf-text-layer .highlight {
+  margin: -1px;
+  padding: 1px;
+  background-color: rgba(180, 0, 170, 1);
+  border-radius: 4px;
+}
+.pdf-text-layer ::selection {
+  background: rgba(0, 0, 255, 0.3);
+}
+
+/* ── Prismatic progress bar ── */
+.folio-progress {
+  height: 4px;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #4F6EF7, #7C59F5);
+  box-shadow: 0 0 6px rgba(79,110,247,0.5);
+  transition: width 0.3s ease;
+}
