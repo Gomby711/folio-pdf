@@ -1,6 +1,6 @@
 {
   "name": "folio-pdf",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Folio — Professional PDF Suite (Read, Convert, Compress, Scan)",
   "author": {
     "name": "Evan Lee",
@@ -92,10 +92,18 @@
         }
       ],
       "icon": "build/icon.png",
-      "category": "public.app-category.productivity"
+      "category": "public.app-category.productivity",
+      "identity": null,
+      "hardenedRuntime": false,
+      "gatekeeperAssess": false,
+      "entitlementsInherit": "build/entitlements.mac.plist",
+      "extendInfo": {
+        "NSHighResolutionCapable": true
+      }
     },
     "dmg": {
-      "title": "Folio PDF"
+      "title": "Folio PDF",
+      "writeUpdateInfo": false
     },
     "linux": {
       "target": [

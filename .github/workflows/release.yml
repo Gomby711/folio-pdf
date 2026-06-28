@@ -5,10 +5,7 @@ name: Release (Windows / macOS / Linux)
 # MUST be built on their own OS, so we fan out across native runners.
 #
 # To ship an update: bump "version" in package.json, commit, then:
-#     git tag v1.0.1 && git push origin v1.0.1
-# Each runner builds its OS and uploads to the GitHub Release for that tag,
-# including the latest*.yml manifests the updater reads. Installed apps then
-# show the "Update available" indicator.
+#     git tag v0.1.6 && git push origin v0.1.6
 
 on:
   push:
@@ -19,12 +16,8 @@ permissions:
   contents: write   # needed to create/update the GitHub Release
 
 jobs:
-  release:
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [windows-latest, macos-latest, ubuntu-latest]
-    runs-on: ${{ matrix.os }}
+  release-mac:
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
 
@@ -36,10 +29,51 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build & publish to GitHub Releases
+      - name: Build & publish macOS (arm64 + x64)
         run: npm run release
         env:
-          # electron-builder uploads to the GitHub Release using this token.
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Not code-signing in CI; skip cert auto-discovery so the build passes.
+          # identity=null in package.json handles skip-signing cleanly.
+          # If you later add Apple certs, set CSC_LINK / CSC_KEY_PASSWORD / APPLE_ID /
+          # APPLE_APP_SPECIFIC_PASSWORD / APPLE_TEAM_ID as repo secrets and remove the
+          # two lines below so signing is auto-discovered.
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+          CSC_LINK: ''
+
+  release-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build & publish Windows
+        run: npm run release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+
+  release-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build & publish Linux
+        run: npm run release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CSC_IDENTITY_AUTO_DISCOVERY: 'false'
