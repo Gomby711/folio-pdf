@@ -1,6 +1,6 @@
 {
   "name": "folio-pdf",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Folio — Professional PDF Suite (Read, Convert, Compress, Scan)",
   "author": {
     "name": "Evan Lee",
@@ -14,6 +14,10 @@
     "build": "tsc --noEmit && vite build && electron-builder",
     "build:dir": "tsc --noEmit && vite build && electron-builder --dir",
     "release": "tsc --noEmit && vite build && electron-builder --publish always",
+    "release:mac:arm64": "tsc --noEmit && vite build && electron-builder --publish always --mac --arm64",
+    "release:mac:x64": "tsc --noEmit && vite build && electron-builder --publish always --mac --x64",
+    "release:win": "tsc --noEmit && vite build && electron-builder --publish always --win",
+    "release:linux": "tsc --noEmit && vite build && electron-builder --publish always --linux",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit"
   },
@@ -76,20 +80,8 @@
     },
     "mac": {
       "target": [
-        {
-          "target": "dmg",
-          "arch": [
-            "arm64",
-            "x64"
-          ]
-        },
-        {
-          "target": "zip",
-          "arch": [
-            "arm64",
-            "x64"
-          ]
-        }
+        { "target": "dmg" },
+        { "target": "zip" }
       ],
       "icon": "build/icon.png",
       "category": "public.app-category.productivity",

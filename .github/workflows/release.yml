@@ -1,11 +1,11 @@
 name: Release (Windows / macOS / Linux)
 
-# Builds installers for every desktop OS AND publishes them to a GitHub Release,
-# which is the feed the in-app auto-updater checks. macOS and Linux binaries
-# MUST be built on their own OS, so we fan out across native runners.
+# Builds installers for every desktop OS and publishes them to a GitHub Release.
+# macOS arm64 and x64 run as SEPARATE jobs — building both in one job causes
+# hdiutil to try mounting two volumes named "Folio PDF" concurrently, which fails.
 #
 # To ship an update: bump "version" in package.json, commit, then:
-#     git tag v0.1.6 && git push origin v0.1.6
+#     git tag v0.1.7 && git push origin v0.1.7
 
 on:
   push:
@@ -13,30 +13,40 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write   # needed to create/update the GitHub Release
+  contents: write
 
 jobs:
-  release-mac:
+  release-mac-arm64:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
-
       - name: Install dependencies
         run: npm ci
-
-      - name: Build & publish macOS (arm64 + x64)
-        run: npm run release
+      - name: Build & publish macOS arm64
+        run: npm run release:mac:arm64
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # identity=null in package.json handles skip-signing cleanly.
-          # If you later add Apple certs, set CSC_LINK / CSC_KEY_PASSWORD / APPLE_ID /
-          # APPLE_APP_SPECIFIC_PASSWORD / APPLE_TEAM_ID as repo secrets and remove the
-          # two lines below so signing is auto-discovered.
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+          CSC_LINK: ''
+
+  release-mac-x64:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Build & publish macOS x64
+        run: npm run release:mac:x64
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CSC_IDENTITY_AUTO_DISCOVERY: 'false'
           CSC_LINK: ''
 
@@ -44,17 +54,14 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
-
       - name: Install dependencies
         run: npm ci
-
       - name: Build & publish Windows
-        run: npm run release
+        run: npm run release:win
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CSC_IDENTITY_AUTO_DISCOVERY: 'false'
@@ -63,17 +70,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
-
       - name: Install dependencies
         run: npm ci
-
       - name: Build & publish Linux
-        run: npm run release
+        run: npm run release:linux
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
