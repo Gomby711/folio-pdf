@@ -1,8 +1,11 @@
 {
   "name": "folio-pdf",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Folio — Professional PDF Suite (Read, Convert, Compress, Scan)",
-  "author": "",
+  "author": {
+    "name": "Evan Lee",
+    "email": "evantlee01@gmail.com"
+  },
   "license": "MIT",
   "main": "dist-electron/main.js",
   "type": "module",
@@ -66,11 +69,9 @@
     ],
     "win": {
       "target": "nsis",
-      "icon": "build/icon.png"
+      "icon": "build/icon.ico"
     },
     "nsis": {
-      "installerIcon": "build/icon.png",
-      "uninstallerIcon": "build/icon.png",
       "shortcutName": "Folio PDF"
     },
     "mac": {
